@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2026 at 03:42 AM
+-- Generation Time: Mar 06, 2026 at 06:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -83,7 +83,6 @@ CREATE TABLE `clients` (
 
 INSERT INTO `clients` (`id`, `client_name`, `contact_person`, `email`, `phone`, `address`, `created_at`) VALUES
 (2, 'Flour Mill MNC', '', '', '', 'Santa Rosa', '2026-02-16 06:47:15'),
-(3, 'Nissin', '', '', '', '', '2026-02-17 07:21:22'),
 (5, 'Calaca(MNC)', '', '', '', '', '2026-02-19 02:25:31'),
 (6, 'Noodles Plant (MNC)', '', '', '', '', '2026-02-19 02:26:38'),
 (7, 'Cake Plant (MNC)', '', '', '', '', '2026-02-19 02:27:09'),
@@ -94,7 +93,8 @@ INSERT INTO `clients` (`id`, `client_name`, `contact_person`, `email`, `phone`, 
 (12, 'Wafer Plant (MNC)', '', '', '', '', '2026-02-19 02:28:53'),
 (13, 'Seasoning Plant (MNC)', '', '', '', '', '2026-02-19 02:29:09'),
 (14, 'Engineering (MNC)', '', '', '', '', '2026-02-19 02:29:28'),
-(15, 'IT DEPT', 'Mr. Ruel Nunez', '', '', '', '2026-02-19 02:29:55');
+(15, 'IT DEPT', 'Mr. Ruel Nunez', '', '', '', '2026-02-19 02:29:55'),
+(16, 'ASTRO', 'Engenette', '', '', '', '2026-03-06 03:13:10');
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,8 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `first_name`, `last_name`, `designation`, `contact_no`, `email`) VALUES
-(4, 'Samuel', 'Base', 'Supervisor', '123456', 'sam@gmail.com');
+(4, 'Samuel', 'Base', 'Supervisor', '123456', 'sam@gmail.com'),
+(5, 'Ruel', 'Nunez', 'IT', '123456', 'nunezru@8th-mile.com');
 
 -- --------------------------------------------------------
 
@@ -130,23 +131,12 @@ CREATE TABLE `products` (
   `sku` varchar(100) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT 0,
+  `unit_type` varchar(20) DEFAULT NULL,
   `unit_price` decimal(10,2) DEFAULT 0.00,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `supplier` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`productID`, `name`, `sku`, `category_id`, `quantity`, `unit_price`, `created_at`, `updated_at`, `supplier`) VALUES
-(8, 'H-Frame', '8M-2026-007', 16, 99, 2500.00, '2026-02-23 04:38:06', '2026-02-23 04:38:06', '8th Mile'),
-(9, 'X-Frame', '8M-2026-008', 16, 100, 1800.00, '2026-02-23 04:38:37', '2026-02-23 04:38:37', '8th Mile'),
-(10, 'Flat Form(Scaffold)', '8M-2026-009', 16, 80, 1200.00, '2026-02-23 04:39:31', '2026-02-23 04:39:31', '8th Mile'),
-(11, 'Join Pin ', '8M-2026-010', 16, 300, 200.00, '2026-02-23 04:40:05', '2026-02-23 04:48:13', '8th Mile'),
-(12, 'Swivel Clamp 1-1/2″ (Scaffolding) ', '8M-2026-011', 16, 500, 300.00, '2026-02-23 04:46:00', '2026-02-23 04:46:00', '8th Mile'),
-(13, 'Scaffolding Caster Wheel  6\" Heavy Duty ', '8M-2026-012', 16, 24, 1400.00, '2026-02-23 04:47:39', '2026-02-23 04:47:58', '8th Mile');
 
 -- --------------------------------------------------------
 
@@ -219,13 +209,6 @@ CREATE TABLE `stock_out` (
   `ClientID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `stock_out`
---
-
-INSERT INTO `stock_out` (`id`, `transaction_id`, `product_id`, `holder_name`, `holder_id_number`, `project_name`, `quantity`, `unit`, `date_out`, `ClientID`) VALUES
-(97, 'OUT-8A5B3', 8, 'Samuel Base', '', 'Renovation', 1, 'Set', '2026-03-03 08:40:14', 3);
-
 -- --------------------------------------------------------
 
 --
@@ -238,6 +221,13 @@ CREATE TABLE `suppliers` (
   `contact` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`supplier_id`, `name`, `contact`, `email`) VALUES
+(3, 'Mega South', '', '');
 
 -- --------------------------------------------------------
 
@@ -332,19 +322,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `returns`
@@ -356,13 +346,13 @@ ALTER TABLE `returns`
 -- AUTO_INCREMENT for table `stock_out`
 --
 ALTER TABLE `stock_out`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`

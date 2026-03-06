@@ -12,6 +12,8 @@ if (isset($_POST['update_product'])) {
     $cat_id = mysqli_real_escape_string($conn, $_POST['category_id']);
     $qty = mysqli_real_escape_string($conn, $_POST['quantity']);
     $price = mysqli_real_escape_string($conn, $_POST['unit_price']);
+    // ADDED: Capture unit_type from the form
+    $unit_type = mysqli_real_escape_string($conn, $_POST['unit_type']);
 
     // 2. Update the Database
     $sql = "UPDATE products SET 
@@ -21,6 +23,7 @@ if (isset($_POST['update_product'])) {
             category_id='$cat_id', 
             quantity='$qty', 
             unit_price='$price', 
+            unit_type='$unit_type', 
             updated_at=NOW() 
             WHERE productID='$id'";
 

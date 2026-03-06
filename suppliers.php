@@ -25,62 +25,20 @@ $result = mysqli_query($conn, $query);
         :root { --8th-blue: #002d72; --8th-blue-dark: #001a42; }
         body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        /* Layout Configuration */
-        #main-content { 
-            transition: margin-left 0.3s; 
-            width: 100%;
-            overflow-x: hidden; 
-        }
+        #main-content { transition: margin-left 0.3s; width: 100%; overflow-x: hidden; }
         @media (min-width: 992px) { #main-content { margin-left: 280px; width: calc(100% - 280px); } }
 
-        /* Modern Table Card */
-        .table-card {
-            border-radius: 8px;
-            overflow: hidden;
-            border: none;
-            background: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        .table-card { border-radius: 8px; overflow: hidden; border: none; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        /* High-End Button Styling */
-        .btn-8th {
-            background-color: var(--8th-blue);
-            color: white;
-            border-radius: 6px;
-            font-weight: 600;
-            padding: 8px 20px;
-            transition: all 0.2s ease;
-            border: none;
-        }
-        .btn-8th:hover {
-            background-color: var(--8th-blue-dark);
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 45, 114, 0.2);
-        }
+        .btn-8th { background-color: var(--8th-blue); color: white; border-radius: 6px; font-weight: 600; padding: 8px 20px; transition: all 0.2s ease; border: none; }
+        .btn-8th:hover { background-color: var(--8th-blue-dark); color: white; box-shadow: 0 4px 8px rgba(0, 45, 114, 0.2); }
 
-        /* Input Group Polish */
-        .input-group-text {
-            background-color: #ffffff;
-            border-right: none;
-            color: #6c757d;
-        }
-        .form-control {
-            border-left: none;
-        }
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #dee2e6;
-        }
-        .input-group:focus-within {
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1) !important;
-            border-radius: 6px;
-        }
+        .input-group-text { background-color: #ffffff; border-right: none; color: #6c757d; }
+        .form-control { border-left: none; }
+        .form-control:focus { box-shadow: none; border-color: #dee2e6; }
+        .input-group:focus-within { box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1) !important; border-radius: 6px; }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { animation: fadeInUp 0.5s ease forwards; }
     </style>
 </head>
@@ -131,7 +89,14 @@ $result = mysqli_query($conn, $query);
                                     <td class="text-muted"><?php echo htmlspecialchars($row['contact']); ?></td>
                                     <td class="text-muted"><?php echo htmlspecialchars($row['email']); ?></td>
                                     <td class="text-end pe-4">
-                                        <button class="btn btn-sm btn-outline-primary border-0 rounded-2 me-1" title="Edit">
+                                        <button class="btn btn-sm btn-outline-primary border-0 rounded-2 me-1 edit-btn" 
+                                                title="Edit"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editSupplierModal"
+                                                data-id="<?php echo $row['supplier_id']; ?>"
+                                                data-name="<?php echo htmlspecialchars($row['name']); ?>"
+                                                data-contact="<?php echo htmlspecialchars($row['contact']); ?>"
+                                                data-email="<?php echo htmlspecialchars($row['email']); ?>">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
                                         <a href="delete_supplier.php?id=<?php echo $row['supplier_id']; ?>" 
@@ -157,67 +122,78 @@ $result = mysqli_query($conn, $query);
     <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 8px; overflow: hidden;">
-                
                 <div class="modal-header border-0 py-3 px-4" style="background-color: #002d72; color: white;">
                     <div class="d-flex align-items-center">
                         <i class="bi bi-building-add fs-5 me-2"></i>
-                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem; letter-spacing: 0.5px;">New Supplier Registration</h5>
+                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">New Supplier Registration</h5>
                     </div>
-                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-
                 <form action="process_add_supplier.php" method="POST">
                     <div class="modal-body p-4 bg-white">
-                        
                         <div class="mb-4">
-                            <h6 class="text-primary fw-bold small text-uppercase mb-3" style="letter-spacing: 1px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
-                                Supplier Identity
-                            </h6>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label class="form-label small fw-bold text-muted mb-1">Full Company Name</label>
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text border-end-0">
-                                            <i class="bi bi-building"></i>
-                                        </span>
-                                        <input type="text" name="name" class="form-control py-2" placeholder="Enter business name" required>
-                                    </div>
-                                </div>
-                            </div>
+                            <h6 class="text-primary fw-bold small text-uppercase mb-3">Supplier Identity</h6>
+                            <label class="form-label small fw-bold text-muted">Full Company Name</label>
+                            <div class="input-group"><span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <input type="text" name="name" class="form-control" required></div>
                         </div>
-
-                        <div class="mb-2">
-                            <h6 class="text-primary fw-bold small text-uppercase mb-3" style="letter-spacing: 1px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
-                                Communication & Channels
-                            </h6>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label small fw-bold text-muted mb-1">Contact Number</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text border-end-0">
-                                            <i class="bi bi-telephone"></i>
-                                        </span>
-                                        <input type="tel" name="contact" class="form-control py-2" placeholder="09XX XXX XXXX" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small fw-bold text-muted mb-1">Email Address</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text border-end-0">
-                                            <i class="bi bi-envelope"></i>
-                                        </span>
-                                        <input type="email" name="email" class="form-control py-2" placeholder="email@company.com" required>
-                                    </div>
-                                </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Contact Number</label>
+                                <div class="input-group"><span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <input type="text" name="contact" class="form-control"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Email Address</label>
+                                <div class="input-group"><span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" name="email" class="form-control"></div>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer border-0 bg-light p-3">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4" style="background-color: #0d6efd;">Save Supplier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                    <div class="modal-footer border-0 bg-light p-3 px-4">
-                        <button type="button" class="btn btn-outline-secondary px-4 fw-bold small" data-bs-dismiss="modal" style="border-radius: 6px;">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4 fw-bold small d-flex align-items-center" style="background-color: #0d6efd; border: none; border-radius: 6px;">
-                            <i class="bi bi-save2 me-2"></i> Save Supplier
-                        </button>
+    <div class="modal fade" id="editSupplierModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 8px; overflow: hidden;">
+                <div class="modal-header border-0 py-3 px-4" style="background-color: #0d6efd; color: white;">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-pencil-square fs-5 me-2"></i>
+                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1.05rem;">Update Supplier Info</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="process_edit_supplier.php" method="POST">
+                    <input type="hidden" name="supplier_id" id="edit_id">
+                    <div class="modal-body p-4 bg-white">
+                        <div class="mb-4">
+                            <h6 class="text-primary fw-bold small text-uppercase mb-3">Identity Details</h6>
+                            <label class="form-label small fw-bold text-muted">Full Company Name</label>
+                            <div class="input-group"><span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <input type="text" name="name" id="edit_name" class="form-control" required></div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Contact Number</label>
+                                <div class="input-group"><span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <input type="text" name="contact" id="edit_contact" class="form-control"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Email Address</label>
+                                <div class="input-group"><span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" name="email" id="edit_email" class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light p-3">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4" style="background-color: #0d6efd;">Update Changes</button>
                     </div>
                 </form>
             </div>
@@ -225,5 +201,17 @@ $result = mysqli_query($conn, $query);
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Script to populate the Edit Modal with existing data
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('edit_id').value = this.dataset.id;
+                document.getElementById('edit_name').value = this.dataset.name;
+                document.getElementById('edit_contact').value = this.dataset.contact;
+                document.getElementById('edit_email').value = this.dataset.email;
+            });
+        });
+    </script>
 </body>
 </html>
